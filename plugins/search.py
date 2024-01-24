@@ -7,7 +7,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
-async def search(bot, message):
+h = async def search(bot, message):
     f_sub = await force_sub(bot, message)
     if f_sub==False:
        return     
@@ -19,6 +19,7 @@ async def search(bot, message):
     query   = message.text 
     head    = "<u>Here is the results 👇\n\nPowered By </u> <b><I>@CyniteBackup</I></b>\n\n"
     results = ""
+    
     try:
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
@@ -34,6 +35,8 @@ async def search(bot, message):
           msg = await message.reply_photo(photo="https://telegra.ph/file/cf6706158b0bfaf436f54.jpg",
                                           caption="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
+           await asyncio.sleep(20) 
+           await h.delete(300) 
        else:
           msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
        _time = (int(time()) + (15*60))
@@ -88,6 +91,8 @@ async def request(bot, update):
     name  = await search_imdb(id)
     url   = "https://www.imdb.com/title/tt"+id
     text  = f"#RequestFromYourGroup\n\nName: {name}\nIMDb: {url}"
-    await bot.send_message(chat_id=admin, text=text, disable_web_page_preview=True)
+    l = await bot.send_message(chat_id=admin, text=text, disable_web_page_preview=True)
+    await asyncio.sleep(20) 
+    await l.delete(300) 
     await update.answer("✅ Request Sent To Admin", show_alert=True)
     await update.message.delete(60)
